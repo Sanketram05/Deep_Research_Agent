@@ -8,7 +8,7 @@ Built using the **OpenAI Agents SDK**, multiple LLM providers, Tavily Web Search
 
 ## 🚀 Live Demo
 
-🔗 **Live App:** [Add your Render URL here]
+🔗 **Live App:** https://deep-research-agent-ucm4.onrender.com
 
 ---
 
