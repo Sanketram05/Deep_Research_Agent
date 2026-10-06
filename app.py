@@ -70,5 +70,7 @@ if __name__ == "__main__":
     ui.launch(
         css=CSS,
         js=JS,
-        theme=gr.themes.Base()
+        theme=gr.themes.Base(),
+        server_name="0.0.0.0",
+        server_port=int(os.environ.get("PORT", 7860))
     )
