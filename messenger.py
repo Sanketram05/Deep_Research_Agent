@@ -10,54 +10,18 @@ EMAIL_ADDRESS = os.getenv("EMAIL_ADDRESS")
 EMAIL_SMTP_SERVER = os.getenv("EMAIL_SMTP_SERVER")
 EMAIL_APP_PASSWORD = os.getenv("EMAIL_APP_PASSWORD")
 
-# def send_email(subject, text_body, html_body, recipient_email):
-#     msg = EmailMessage()
-#     msg["From"] = EMAIL_ADDRESS
-#     msg["To"] = recipient_email
-#     msg["Subject"] = subject
-#     msg.set_content(text_body)
-#     msg.add_alternative(html_body, subtype="html")
-
-#     with smtplib.SMTP(EMAIL_SMTP_SERVER, 587) as server:
-#         server.starttls()
-#         server.login(EMAIL_ADDRESS, EMAIL_APP_PASSWORD)
-#         server.send_message(msg)
-
 def send_email(subject, text_body, html_body, recipient_email):
-    print("EMAIL: connecting to SMTP...")
-
     msg = EmailMessage()
     msg["From"] = EMAIL_ADDRESS
     msg["To"] = recipient_email
     msg["Subject"] = subject
-
     msg.set_content(text_body)
     msg.add_alternative(html_body, subtype="html")
 
-    try:
-        with smtplib.SMTP(
-            EMAIL_SMTP_SERVER,
-            587,
-            timeout=30
-        ) as server:
-
-            print("EMAIL: connected")
-
-            server.starttls()
-            print("EMAIL: TLS started")
-
-            server.login(
-                EMAIL_ADDRESS,
-                EMAIL_APP_PASSWORD
-            )
-            print("EMAIL: logged in")
-
-            server.send_message(msg)
-            print("EMAIL: message sent")
-
-    except Exception as e:
-        print("EMAIL ERROR:", type(e).__name__, str(e))
-        raise
+    with smtplib.SMTP(EMAIL_SMTP_SERVER, 587) as server:
+        server.starttls()
+        server.login(EMAIL_ADDRESS, EMAIL_APP_PASSWORD)
+        server.send_message(msg)
 
 pushover_user = os.getenv("PUSHOVER_USER")
 pushover_token = os.getenv("PUSHOVER_TOKEN")
