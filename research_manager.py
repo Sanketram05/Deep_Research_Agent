@@ -2,8 +2,9 @@ from agents import Runner
 from search_agent import search_agent
 from planner_agent import planner_agent, WebSearchItem, WebSearchPlan
 from writer_agent import writer_agent, ReportData
-from email_agent import email_agent
+# from email_agent import email_agent
 import asyncio
+import markdown
 
 class ResearchManager:
 
@@ -37,12 +38,72 @@ class ResearchManager:
         result = await Runner.run(writer_agent, input_message)
         return result.final_output
     
-    async def send_email(self, report: ReportData, email: str) -> None:
-        input_message = f"""
-        Recipient email address:
-        {email}
+    # async def send_email(self, report: ReportData, email: str) -> None:
+    #     input_message = f"""
+    #     Recipient email address:
+    #     {email}
         
-        Research report:
-        {report.markdown_report}
-        """
-        await Runner.run(email_agent,input_message)
+    #     Research report:
+    #     {report.markdown_report}
+    #     """
+    #     await Runner.run(email_agent,input_message)
+
+    async def send_email(self, report: ReportData, email: str) -> None:
+    print("EMAIL: starting email delivery")
+
+    from messenger import send_email
+
+    subject = "Your Deep Research Report"
+    text_body = report.markdown_report
+
+    html_report = markdown.markdown(
+        report.markdown_report,
+        extensions=["tables", "fenced_code"]
+    )
+
+    html_body = f"""
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <meta charset="UTF-8">
+        <style>
+            body {{
+                font-family: Arial, sans-serif;
+                line-height: 1.6;
+                max-width: 800px;
+                margin: 40px auto;
+                padding: 20px;
+                color: #222;
+            }}
+            table {{
+                border-collapse: collapse;
+                width: 100%;
+            }}
+            th, td {{
+                border: 1px solid #ddd;
+                padding: 8px;
+                text-align: left;
+            }}
+            pre {{
+                background: #f5f5f5;
+                padding: 15px;
+                overflow-x: auto;
+            }}
+        </style>
+    </head>
+    <body>
+        <h1>Deep Research Report</h1>
+        {html_report}
+    </body>
+    </html>
+    """
+
+    await asyncio.to_thread(
+        send_email,
+        subject,
+        text_body,
+        html_body,
+        email
+    )
+
+    print("EMAIL: delivery completed")
