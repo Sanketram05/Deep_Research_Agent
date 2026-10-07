@@ -18,7 +18,8 @@ class ResearchManager:
         # yield "Report written, sending email..."
         # await self.send_email(report, email)
         yield "Report written, sending email..."
-        print("DEBUG 1: about to call send_email()", flush=True)   
+        print("DEBUG 1: about to call send_email()", flush=True)
+        raise Exception("DEBUG: reached email section")
         await self.send_email(report, email)
         print("DEBUG 2: send_email() finished", flush=True)
         
