@@ -15,8 +15,13 @@ class ResearchManager:
         search_results = await self.perform_searches(search_plan)
         yield "Searches complete, writing report..."
         report = await self.write_report(query, search_results)
+        # yield "Report written, sending email..."
+        # await self.send_email(report, email)
         yield "Report written, sending email..."
+        print("DEBUG 1: about to call send_email()", flush=True)   
         await self.send_email(report, email)
+        print("DEBUG 2: send_email() finished", flush=True)
+        
         yield "Email sent, research complete"
         yield report.markdown_report
 
